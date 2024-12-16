@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 5000
+    - name: telegram-webhook
+      protocol: TCP
+      port: 8443
+      targetPort: 8443
+  selector:
+    app: 4cat
+  type: ClusterIP

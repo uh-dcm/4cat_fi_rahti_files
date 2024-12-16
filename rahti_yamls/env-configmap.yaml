@@ -1,0 +1,32 @@
+apiVersion: v1
+data:
+  API_HOST: "0.0.0.0"
+  DOCKER_CONFIG_VOL: 4cat_4cat_config
+  DOCKER_DATA_VOL: 4cat_4cat_data
+  DOCKER_DB_VOL: 4cat_4cat_db
+  DOCKER_LOGS_VOL: 4cat_4cat_logs
+  DOCKER_TAG: stable
+  POSTGRES_DB: fourcat
+  POSTGRESQL_DB: fourcat
+  POSTGRES_HOST: db
+  POSTGRES_HOST_AUTH_METHOD: trust
+  POSTGRES_PASSWORD: supers3cr3t
+  POSTGRESQL_PASSWORD: supers3cr3t
+  POSTGRES_PORT: "5432"
+  POSTGRES_TAG: latest
+  POSTGRES_USER: fourcat
+  POSTGRESQL_USER: fourcat
+  PUBLIC_API_PORT: "4444"
+  PUBLIC_PORT: "80"
+  SERVER_NAME: localhost
+  TELEGRAM_PORT: "8443"
+  log_level: debug
+  threads: "4"
+  worker_class: gthread
+  worker_tmp_dir: /dev/shm
+  workers: "4"
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: backend-env
+  name: all-variables

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /bin/kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  labels:
+    io.kompose.service: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /bin/kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      labels:
+        io.kompose.service: db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRES_DB
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRESQL_DB
+            - name: POSTGRES_HOST_AUTH_METHOD
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRES_HOST_AUTH_METHOD
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRES_USER
+            - name: POSTGRESQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: all-variables
+                  key: POSTGRESQL_USER
+          image: 'quay.io/sclorg/postgresql-15-c9s'
+          livenessProbe:
+            exec:
+              command:
+                 ["pg_isready", "-U", "fourcat"]
+            failureThreshold: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: 4cat-db
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-volume
+      restartPolicy: Always
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: db-volume
+

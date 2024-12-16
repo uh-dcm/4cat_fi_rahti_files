@@ -1,0 +1,12 @@
+# Service for PostgreSQL
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    io.kompose.service: db
+spec:
+  ports:
+    - port: 5432
+  selector:
+    io.kompose.service: db

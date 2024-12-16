@@ -1,0 +1,283 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: 4cat
+  name: 4cat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 4cat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: 4cat
+    spec:
+      containers:
+        - name: 4cat-backend
+          command:
+            - "docker/docker-entrypoint.sh"
+          env:
+            - name: API_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: API_HOST
+                  name: all-variables
+            - name: DOCKER_CONFIG_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_CONFIG_VOL
+                  name: all-variables
+            - name: DOCKER_DATA_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_DATA_VOL
+                  name: all-variables
+            - name: DOCKER_DB_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_DB_VOL
+                  name: all-variables
+            - name: DOCKER_LOGS_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_LOGS_VOL
+                  name: all-variables
+            - name: DOCKER_TAG
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_TAG
+                  name: all-variables
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DB
+                  name: all-variables
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_HOST
+                  name: all-variables
+            - name: POSTGRES_HOST_AUTH_METHOD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_HOST_AUTH_METHOD
+                  name: all-variables
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: all-variables
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PORT
+                  name: all-variables
+            - name: POSTGRES_TAG
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_TAG
+                  name: all-variables
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USER
+                  name: all-variables
+            - name: PUBLIC_API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PUBLIC_API_PORT
+                  name: all-variables
+            - name: PUBLIC_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PUBLIC_PORT
+                  name: all-variables
+            - name: SERVER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVER_NAME
+                  name: all-variables
+            - name: TELEGRAM_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: TELEGRAM_PORT
+                  name: all-variables
+            - name: log_level
+              valueFrom:
+                configMapKeyRef:
+                  key: log_level
+                  name: all-variables
+            - name: threads
+              valueFrom:
+                configMapKeyRef:
+                  key: threads
+                  name: all-variables
+            - name: worker_class
+              valueFrom:
+                configMapKeyRef:
+                  key: worker_class
+                  name: all-variables
+            - name: worker_tmp_dir
+              valueFrom:
+                configMapKeyRef:
+                  key: worker_tmp_dir
+                  name: all-variables
+            - name: workers
+              valueFrom:
+                configMapKeyRef:
+                  key: workers
+                  name: all-variables
+          image: 'image-registry.apps.2.rahti.csc.fi/4cat-fi/4cat_fi:1.0'
+          ports:
+            - containerPort: 4444
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/src/app/data
+              name: data-volume
+            - mountPath: /usr/src/app/config
+              name: config-volume
+            - mountPath: /usr/src/app/logs
+              name: logs-volume
+        - name: 4cat-frontend
+          args:
+            ["docker/wait-for-backend.sh"]
+          env:
+            - name: API_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: API_HOST
+                  name: all-variables
+            - name: DOCKER_CONFIG_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_CONFIG_VOL
+                  name: all-variables
+            - name: DOCKER_DATA_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_DATA_VOL
+                  name: all-variables
+            - name: DOCKER_DB_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_DB_VOL
+                  name: all-variables
+            - name: DOCKER_LOGS_VOL
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_LOGS_VOL
+                  name: all-variables
+            - name: DOCKER_TAG
+              valueFrom:
+                configMapKeyRef:
+                  key: DOCKER_TAG
+                  name: all-variables
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DB
+                  name: all-variables
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_HOST
+                  name: all-variables
+            - name: POSTGRES_HOST_AUTH_METHOD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_HOST_AUTH_METHOD
+                  name: all-variables
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: all-variables
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PORT
+                  name: all-variables
+            - name: POSTGRES_TAG
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_TAG
+                  name: all-variables
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_USER
+                  name: all-variables
+            - name: PUBLIC_API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PUBLIC_API_PORT
+                  name: all-variables
+            - name: PUBLIC_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PUBLIC_PORT
+                  name: all-variables
+            - name: SERVER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVER_NAME
+                  name: all-variables
+            - name: TELEGRAM_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: TELEGRAM_PORT
+                  name: all-variables
+            - name: log_level
+              valueFrom:
+                configMapKeyRef:
+                  key: log_level
+                  name: all-variables
+            - name: threads
+              valueFrom:
+                configMapKeyRef:
+                  key: threads
+                  name: all-variables
+            - name: worker_class
+              valueFrom:
+                configMapKeyRef:
+                  key: worker_class
+                  name: all-variables
+            - name: worker_tmp_dir
+              valueFrom:
+                configMapKeyRef:
+                  key: worker_tmp_dir
+                  name: all-variables
+            - name: workers
+              valueFrom:
+                configMapKeyRef:
+                  key: workers
+                  name: all-variables
+          image: 'image-registry.apps.2.rahti.csc.fi/4cat-fi/4cat_fi:1.0'
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/src/app/data
+              name: data-volume
+            - mountPath: /usr/src/app/config
+              name: config-volume
+            - mountPath: /usr/src/app/logs
+              name: logs-volume
+ 
+      restartPolicy: Always
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: data-volume
+        - name: config-volume
+          persistentVolumeClaim:
+            claimName: config-volume
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: logs-volume
